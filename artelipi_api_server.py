@@ -17,7 +17,9 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://artelipi-frontend-production.up.railway.app",  # Railway frontend
+        "https://artelipi.vercel.app",  # Vercel production
+        "https://artelipi-git-main-shashwat-dev1s-projects.vercel.app",  # Vercel preview
+        "https://artelipi-frontend-production.up.railway.app",  # Railway frontend (legacy)
         "http://localhost:3000",  # Local development
         "http://localhost:3001"   # Alternative local port
     ],
