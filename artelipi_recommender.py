@@ -11,6 +11,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime, timedelta
 
+import json
+
 class ArtelipiRecommender:
     def __init__(self):
         """Initialize recommender with Firestore connection"""
@@ -31,15 +33,24 @@ class ArtelipiRecommender:
         except ValueError:
             # Initialize new app
             try:
-                # Try to use default credentials or service account
-                cred = credentials.ApplicationDefault()
-                firebase_admin.initialize_app(cred)
-                self.db = firestore.client()
-                print("✅ Initialized Firebase with default credentials")
+                # First, try to load from FIREBASE_SERVICE_ACCOUNT_JSON env var
+                firebase_json = os.environ.get("FIREBASE_SERVICE_ACCOUNT_JSON")
+                if firebase_json:
+                    firebase_config = json.loads(firebase_json)
+                    cred = credentials.Certificate(firebase_config)
+                    firebase_admin.initialize_app(cred)
+                    self.db = firestore.client()
+                    print(f"✅ Initialized Firebase from JSON env var for project: {firebase_config.get('project_id')}")
+                else:
+                    # Fallback: Try default credentials
+                    cred = credentials.ApplicationDefault()
+                    firebase_admin.initialize_app(cred)
+                    self.db = firestore.client()
+                    print("✅ Initialized Firebase with default credentials")
             except Exception as e:
                 # Fallback: Initialize without credentials (will use environment)
                 print(f"⚠️ Could not initialize Firebase: {e}")
-                print("⚠️ Make sure Firebase is configured in your Next.js app")
+                print("⚠️ Make sure FIREBASE_SERVICE_ACCOUNT_JSON is set")
                 # For now, we'll create empty dataframe
                 self.df = pd.DataFrame()
                 return
