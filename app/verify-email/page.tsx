@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { sendEmailVerification, applyActionCode } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 import toast from 'react-hot-toast';
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user, loading } = useAuth();
@@ -134,7 +134,7 @@ export default function VerifyEmailPage() {
                         Verify Your Email
                     </h1>
                     <p className="text-gray-600">
-                        We've sent a verification link to
+                        We&apos;ve sent a verification link to
                     </p>
                     <p className="text-blue-600 font-semibold mt-1">
                         {user?.email}
@@ -147,7 +147,7 @@ export default function VerifyEmailPage() {
                     <ol className="list-decimal list-inside space-y-2 text-sm text-blue-800">
                         <li>Check your email inbox</li>
                         <li>Click the verification link</li>
-                        <li>Return here and click "I've Verified"</li>
+                        <li>Return here and click &quot;I&apos;ve Verified&quot;</li>
                     </ol>
                 </div>
 
@@ -172,7 +172,7 @@ export default function VerifyEmailPage() {
 
                 {/* Help Text */}
                 <div className="mt-6 text-center text-sm text-gray-500">
-                    <p>Didn't receive the email?</p>
+                    <p>Didn&apos;t receive the email?</p>
                     <ul className="mt-2 space-y-1">
                         <li>• Check your spam folder</li>
                         <li>• Make sure {user?.email} is correct</li>
@@ -191,5 +191,24 @@ export default function VerifyEmailPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+function VerifyEmailLoading() {
+    return (
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading...</p>
+            </div>
+        </div>
+    );
+}
+
+export default function VerifyEmailPage() {
+    return (
+        <Suspense fallback={<VerifyEmailLoading />}>
+            <VerifyEmailContent />
+        </Suspense>
     );
 }

@@ -44,7 +44,7 @@ export async function getPersonalizedFeed(
             const remaining = limitCount - posts.length;
             const q = query(
                 collection(db, 'posts'),
-                orderBy('viewCount', 'desc'),
+                orderBy('views', 'desc'),
                 limit(remaining)
             );
             const snapshot = await getDocs(q);
@@ -92,7 +92,7 @@ export async function getFeaturedFeed(limitCount: number = 20): Promise<Post[]> 
         // Get top-performing articles
         const topQuery = query(
             collection(db, 'posts'),
-            orderBy('viewCount', 'desc'),
+            orderBy('views', 'desc'),
             limit(10)
         );
         const topSnapshot = await getDocs(topQuery);
@@ -105,8 +105,8 @@ export async function getFeaturedFeed(limitCount: number = 20): Promise<Post[]> 
 
         // Sort by engagement score (views + likes)
         posts.sort((a, b) => {
-            const aScore = (a.viewCount || 0) + (a.likeCount || 0) * 2;
-            const bScore = (b.viewCount || 0) + (b.likeCount || 0) * 2;
+            const aScore = (a.views || 0) + (a.likeCount || 0) * 2;
+            const bScore = (b.views || 0) + (b.likeCount || 0) * 2;
             return bScore - aScore;
         });
 

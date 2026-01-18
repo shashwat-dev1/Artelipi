@@ -32,7 +32,7 @@ export async function getUserAnalytics(userId: string): Promise<UserAnalytics | 
         });
 
         // Calculate totals
-        const totalViews = articles.reduce((sum, post) => sum + (post.viewCount || 0), 0);
+        const totalViews = articles.reduce((sum, post) => sum + (post.views || 0), 0);
         const totalLikes = articles.reduce((sum, post) => sum + (post.likeCount || 0), 0);
         const totalBookmarks = articles.reduce((sum, post) => sum + (post.bookmarkCount || 0), 0);
         const totalComments = articles.reduce((sum, post) => sum + (post.commentCount || 0), 0);
@@ -43,7 +43,7 @@ export async function getUserAnalytics(userId: string): Promise<UserAnalytics | 
                 postId: post.id,
                 title: post.title,
                 slug: post.slug,
-                views: post.viewCount || 0,
+                views: post.views || 0,
                 likes: post.likeCount || 0,
                 bookmarks: post.bookmarkCount || 0,
                 comments: post.commentCount || 0,
@@ -68,9 +68,9 @@ export async function getUserAnalytics(userId: string): Promise<UserAnalytics | 
                 const postDate = post.createdAt instanceof Date ? post.createdAt : post.createdAt.toDate();
                 return postDate >= weekAgo;
             })
-            .reduce((sum, post) => sum + (post.viewCount || 0), 0);
+            .reduce((sum, post) => sum + (post.views || 0), 0);
 
-        const viewsThisMonth = recentArticles.reduce((sum, post) => sum + (post.viewCount || 0), 0);
+        const viewsThisMonth = recentArticles.reduce((sum, post) => sum + (post.views || 0), 0);
 
         const likesThisWeek = recentArticles
             .filter((post) => {
@@ -124,7 +124,7 @@ export async function getArticleStats(postId: string): Promise<ArticleStats | nu
             postId,
             title: post.title,
             slug: post.slug,
-            views: post.viewCount || 0,
+            views: post.views || 0,
             likes: post.likeCount || 0,
             bookmarks: post.bookmarkCount || 0,
             comments: post.commentCount || 0,
