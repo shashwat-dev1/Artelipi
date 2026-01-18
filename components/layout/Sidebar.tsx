@@ -5,9 +5,14 @@ import { useAuth } from '@/components/auth/AuthProvider';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { usePathname } from 'next/navigation';
 
-export default function Sidebar() {
+interface SidebarProps {
+    collapsed?: boolean;
+}
+
+export default function Sidebar({ collapsed: collapsedProp }: SidebarProps = {}) {
     const { user, userData } = useAuth();
-    const { collapsed } = useSidebar();
+    const { collapsed: collapsedContext } = useSidebar();
+    const collapsed = collapsedProp !== undefined ? collapsedProp : collapsedContext;
     const pathname = usePathname();
 
     const isActive = (path: string) => pathname === path;
