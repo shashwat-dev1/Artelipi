@@ -1,0 +1,15 @@
+# Python Dependencies for ML Recommendation System
+
+# Core ML Libraries - Updated for Python 3.13 compatibility
+pandas>=2.2.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+
+# API Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.25.0
+pydantic>=2.5.0
+
+# Utilities
+python-multipart>=0.0.6
+firebase-admin>=6.2.0

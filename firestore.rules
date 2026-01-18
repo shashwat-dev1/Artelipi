@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Posts Collection
+    match /posts/{postId} {
+      // Anyone can read published posts
+      allow read: if true;
+      
+      // Only authenticated users can create posts
+      allow create: if request.auth != null
+                    && request.resource.data.authorId == request.auth.uid;
+      
+      // Authors can fully update/delete their posts
+      allow delete: if request.auth != null
+                    && request.auth.uid == resource.data.authorId;
+      
+      // Authors can update all fields
+      allow update: if request.auth != null
+                    && request.auth.uid == resource.data.authorId;
+      
+      // Any authenticated user can update engagement counts (likes, comments, bookmarks)
+      allow update: if request.auth != null
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                       .hasOnly(['likeCount', 'commentCount', 'bookmarkCount', 'views']);
+    }
+    
+    // Users Collection
+    match /users/{userId} {
+      // Anyone can read user profiles (for bylines)
+      allow read: if true;
+      
+      // Users can only write their own profile
+      allow write: if request.auth != null
+                   && request.auth.uid == userId;
+    }
+    
+    // Likes Collection
+    match /likes/{likeId} {
+      // Anyone can read likes
+      allow read: if true;
+      
+      // Only authenticated users can create likes
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+      
+      // Users can only delete their own likes
+      allow delete: if request.auth != null
+                    && request.auth.uid == resource.data.userId;
+    }
+    
+    // Comments Collection
+    match /comments/{commentId} {
+      // Anyone can read comments
+      allow read: if true;
+      
+      // Only authenticated users can create comments
+      allow create: if request.auth != null
+                    && request.resource.data.authorId == request.auth.uid;
+      
+      // Users can update/delete their own comments
+      allow update, delete: if request.auth != null
+                            && request.auth.uid == resource.data.authorId;
+    }
+    
+    // Bookmarks Collection
+    match /bookmarks/{bookmarkId} {
+      // Users can read their own bookmarks
+      allow read: if request.auth != null
+                  && (resource == null || request.auth.uid == resource.data.userId);
+      
+      // Users can only create/delete their own bookmarks
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+      
+      allow delete: if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+    }
+  }
+}

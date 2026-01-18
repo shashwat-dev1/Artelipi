@@ -1,0 +1,99 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+dist/
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (NEVER commit these!)
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# ide
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.Python
+*.egg-info/
+.eggs/
+
+# ML & Data files (large files - not for git)
+ml_models/
+Dataset/
+*.pkl
+*.csv
+*.h5
+*.model
+
+# Firebase credentials (NEVER commit!)
+firebase-service-account.json
+*-service-account*.json
+serviceAccountKey.json
+
+# Platform-specific dev scripts
+start-dev.bat
+start-dev.ps1
+*.bat
+*.ps1
+
+# Deployment configs (optional - only if using specific platform)
+# railway.toml
+# nixpacks.json
+# Procfile
+# runtime.txt
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
